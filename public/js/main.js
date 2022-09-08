@@ -55,3 +55,10 @@ $(document).ready(function () {
     }
   })
 })
+
+  function markNotificationAsRead(){
+
+     //alert("cliekcd")
+    $.get('/markAsRead')
+     
+  }

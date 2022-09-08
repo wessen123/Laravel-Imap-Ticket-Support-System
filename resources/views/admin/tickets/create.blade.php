@@ -1,6 +1,32 @@
 @extends('layouts.admin')
 @section('content')
-
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Laravel 8 Tags System Example - Nicesnippets.com</title>
+<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet">
+<link href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-tagsinput/0.8.0/bootstrap-tagsinput.css" rel="stylesheet" />
+<html lang="{{ app()->getLocale() }}">
+    <head>
+        <meta charset="utf-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <title>Laravel</title>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+        <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css" rel="stylesheet">
+        <meta name="csrf-token" content="{{ csrf_token() }}" />
+    </head>
+<style>
+    .bootstrap-tagsinput .tag{
+        margin-right: 2px;
+        color: #ffffff;
+        background: #2196f3;
+        padding: 3px 7px;
+        border-radius: 3px;
+    }
+    .bootstrap-tagsinput {
+        width: 100%;
+    }
+</style>
 <div class="card">
     <div class="card-header">
         {{ trans('global.create') }} {{ trans('cruds.ticket.title_singular') }}
@@ -33,19 +59,11 @@
                     {{ trans('cruds.ticket.fields.content_helper') }}
                 </p>
             </div>
-            <div class="form-group {{ $errors->has('attachments') ? 'has-error' : '' }}">
-                <label for="attachments">{{ trans('cruds.ticket.fields.attachments') }}</label>
-                <div class="needsclick dropzone" id="attachments-dropzone">
-
-                </div>
-                @if($errors->has('attachments'))
-                    <em class="invalid-feedback">
-                        {{ $errors->first('attachments') }}
-                    </em>
-                @endif
-                <p class="helper-block">
-                    {{ trans('cruds.ticket.fields.attachments_helper') }}
-                </p>
+            <div class="form-group ">
+                <label for="attachments">{{ trans('Tags') }}</label>
+               
+               
+                <input class="form-control" type="text" data-role="tagsinput" name="tags">
             </div>
             <div class="form-group {{ $errors->has('status_id') ? 'has-error' : '' }}">
                 <label for="status">{{ trans('cruds.ticket.fields.status') }}*</label>
@@ -73,19 +91,40 @@
                     </em>
                 @endif
             </div>
-            <div class="form-group {{ $errors->has('category_id') ? 'has-error' : '' }}">
-                <label for="category">{{ trans('cruds.ticket.fields.category') }}*</label>
-                <select name="category_id" id="category" class="form-control select2" required>
-                    @foreach($categories as $id => $category)
-                        <option value="{{ $id }}" {{ (isset($ticket) && $ticket->category ? $ticket->category->id : old('category_id')) == $id ? 'selected' : '' }}>{{ $category }}</option>
-                    @endforeach
+            <div class="form-group {{ $errors->has('status_id') ? 'has-error' : '' }}">
+                <label style=" color: #8d3e3e;   font-size:1.5em;margin:0; font-family:Times New Roman, Times, serif;"  for="status">{{ trans('Main Catagory') }}</label>
+                <select name="c_id" id="status" class="form-control select1" required>
+                    <option style="color: #8d3e3e;   font-size:1.5em;margin:0; font-family: Times New Roman, Times, serif;" value="">Select Category </option>
+                    <option style="color: #8d3e3e;   font-size:1.5em;margin:0; font-family: Times New Roman, Times, serif;" value="0">Root Category </option>
+                    @foreach($cats as $id => $cat)
+                        <option style="color: #8d3e3e;   font-size:1.5em;margin:0; font-family: Times New Roman, Times, serif;" value="{{ $cat->id }}">{{ $cat->name }}</option>
+                        @if($cat->childs->count()>0)
+                        @foreach($cat->childs as $id => $ca)
+                        <option  style="background-color: aquamarine;font-size:1.3em;margin:0; font-family: Times New Roman, Times, serif;"  value="{{ $ca->id }}">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;-{{ $ca->name }}</option>
+                        @foreach($ca->childs as $id => $c)
+                        <option  style="background-color: rgb(230, 238, 15);font-size:1.3em;margin-left:10px; font-family: Times New Roman, Times, serif;"  value="{{ $c->id }}">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{{ $c->name }}</option>
+                        @foreach($c->childs as $id => $caa)
+                        <option  style="background-color: rgb(250, 52, 52);font-size:1.3em;margin:0; font-family: Times New Roman, Times, serif;"  value="{{ $caa->id }}">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;---{{ $caa->name }}</option>
+                        @foreach($caa->childs as $id => $caaa)
+                        <option  style="background-color: rgb(235, 20, 231);font-size:2em;margin:0; font-family: Times New Roman, Times, serif;"  value="{{ $caaa->id }}">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;---{{ $caaa->name }}</option>
+                   
+                        @endforeach
+                        @endforeach
+                        @endforeach
+                        @endforeach
+                    @else
+                    <option style=" color: #eb0d0d;" value="" >&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<b>no sub cat for {{ $cat->name }}</b> </option>
+                    @endif
+                        @endforeach
                 </select>
-                @if($errors->has('category_id'))
+                @if($errors->has('status_id'))
                     <em class="invalid-feedback">
-                        {{ $errors->first('category_id') }}
+                        {{ $errors->first('status_id') }}
                     </em>
                 @endif
             </div>
+       
+        <div>
             <div class="form-group {{ $errors->has('author_name') ? 'has-error' : '' }}">
                 <label for="author_name">{{ trans('cruds.ticket.fields.author_name') }}</label>
                 <input type="text" id="author_name" name="author_name" class="form-control" value="{{ old('author_name', isset($ticket) ? $ticket->author_name : '') }}">
@@ -133,9 +172,12 @@
 
     </div>
 </div>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-tagsinput/0.8.0/bootstrap-tagsinput.js"></script>
 @endsection
 
 @section('scripts')
+
 <script>
     var uploadedAttachmentsMap = {}
 Dropzone.options.attachmentsDropzone = {
@@ -192,4 +234,5 @@ Dropzone.options.attachmentsDropzone = {
      }
 }
 </script>
+
 @stop

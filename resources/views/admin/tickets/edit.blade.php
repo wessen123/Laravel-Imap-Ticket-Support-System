@@ -1,6 +1,32 @@
 @extends('layouts.admin')
 @section('content')
-
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Laravel 8 Tags System Example - Nicesnippets.com</title>
+<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet">
+<link href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-tagsinput/0.8.0/bootstrap-tagsinput.css" rel="stylesheet" />
+<html lang="{{ app()->getLocale() }}">
+    <head>
+        <meta charset="utf-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <title>Laravel</title>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+        <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css" rel="stylesheet">
+        <meta name="csrf-token" content="{{ csrf_token() }}" />
+    </head>
+<style>
+    .bootstrap-tagsinput .tag{
+        margin-right: 2px;
+        color: #ffffff;
+        background: #2196f3;
+        padding: 3px 7px;
+        border-radius: 3px;
+    }
+    .bootstrap-tagsinput {
+        width: 100%;
+    }
+</style>
 <div class="card">
     <div class="card-header" style="color: rgb(97, 6, 6);  font-size:2em;margin:0; font-family: Times New Roman, Times, serif;">
         {{ trans('global.edit') }} {{ trans('cruds.ticket.title_singular') }}
@@ -38,6 +64,7 @@
                                     </p>
                                 </div>
                             </div>
+                            
                             <!-- Form Group (last name)-->
                             <div class="col-md-6">
                                 <div class="form-group {{ $errors->has('author_email') ? 'has-error' : '' }}">
@@ -110,17 +137,38 @@
                             <!-- Form Group (birthday)-->
                             <div class="col-md-6">
                                 <div class="form-group {{ $errors->has('category_id') ? 'has-error' : '' }}">
-                                    <label style=" color: #8d3e3e;   font-size:1.5em;margin:0; font-family: Times New Roman, Times, serif;"  for="category">{{ trans('cruds.ticket.fields.category') }}</label>
+                                   <label style=" color: #8d3e3e;   font-size:1.5em;margin:0; font-family: Times New Roman, Times, serif;"  for="category">{{ trans('cruds.ticket.fields.category') }}</label>
                                     <select name="category_id" id="category" class="form-control select2" required>
                                         @foreach($categories as $id => $category)
-                                            <option value="{{ $id }}" {{ (isset($ticket) && $ticket->category ? $ticket->category->id : old('category_id')) == $id ? 'selected' : '' }}>{{ $category }}</option>
-                                        @endforeach
+                                            <option style="color: #8d3e3e;   font-size:1.5em;margin:0; font-family: Times New Roman, Times, serif;"  value="{{ $category->id }}"{{ (isset($ticket) && $ticket->category ? $ticket->category->id : old('category_id')) == $category->id ? 'selected' : '' }}>{{ $category->name }}</option>
+                                            @if($category->childs->count()>0)
+                                            @foreach($category->childs as $cat)
+                                     <option style="color: rgb(2, 104, 9);font-size:1.5em;margin:0; font-family: Times New Roman, Times, serif;" value="{{ $cat->id }}" {{ (isset($ticket) && $ticket->category ? $ticket->category->id : old('category_id')) ==$cat->id ? 'selected' : '' }}>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{{ $cat->name }}</option>
+                                     @foreach($cat->childs as $ca)
+                                          <option style="color: rgb(247, 212, 14);font-size:1.3em;margin-left:20px; font-family: Times New Roman, Times, serif;" value="{{ $ca->id }}" {{ (isset($ticket) && $ticket->category ? $ticket->category->id : old('category_id')) == $ca->id  ? 'selected' : '' }}>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; {{ $ca->name }}</option>
+                                          @foreach($ca->childs as  $c)
+                                          <option  style="color: rgb(190, 19, 22);font-size:1.3em;margin-left:10px; font-family: Times New Roman, Times, serif;"  value="{{ $c->id }}" {{ (isset($ticket) && $ticket->category ? $ticket->category->id : old('category_id')) == $c->id  ? 'selected' : '' }}>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{{ $c->name }}</option>
+                                          @foreach($c->childs as $id => $caa)
+                                          <option  style="color: rgb(6, 102, 105);font-size:1.3em;margin:0; font-family: Times New Roman, Times, serif;"   value="{{ $caa->id }}" {{ (isset($ticket) && $ticket->category ? $ticket->category->id : old('category_id')) == $caa->id  ? 'selected' : '' }}>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{{ $caa->name }}</option>
+                                        
+                                          @endforeach
+                                          @endforeach
+                                          
+                                          @endforeach
+                                           @endforeach
+                                           
+                                @else
+                                <option style=" color: #eb0d0d;" value="" >&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; <b>no sub cat for {{ $category->name }} </b></option>
+                                @endif
+                                            @endforeach
                                     </select>
                                     @if($errors->has('category_id'))
                                         <em class="invalid-feedback">
                                             {{ $errors->first('category_id') }}
                                         </em>
                                     @endif
+
+                            
                                 </div>
                             </div>
                         </div>
@@ -176,10 +224,30 @@
                             {{ $errors->first('assigned_to_user_id') }}
                         </em>
                     @endif
+                    
                 </div>
             @endif
                             </div>
                             <!-- Form Group (birthday)-->
+                            <div class="col-md-6">
+                                <div class="form-group {{ $errors->has('title') ? 'has-error' : '' }}">
+                                    <label style=" color: #8d3e3e;   font-size:1.5em;margin:0; font-family: Times New Roman, Times, serif;"  for="title">{{ trans('Tags') }}</label>
+                                   
+                                    @if($ticket->count())
+                                   
+                                    @foreach($ticket->tags as $key => $tag)
+                                    <label class="badge bg-primary">{{ @$tag->name }}</label>
+                                   
+                                    @endforeach
+                         
+                            @endif
+                                    <input class="form-control" type="text" data-role="tagsinput" name="tags">
+                                    @if ($errors->has('tags'))
+                                        <span class="text-danger">{{ $errors->first('tags') }}</span>
+                                    @endif
+                                </div>
+                                
+                            </div>
                             <div class="col-md-6">
                                 <div>
                                     <input style="background: #8d3e3e;  color: #fff; width:180px; height: 50px; font-size:2em;margin:0; font-family: cursive,Times New Roman, Times, serif;" class="btn btn-danger" type="submit" value="{{ trans('global.save') }}">
@@ -203,7 +271,9 @@
 @endsection
 
 @section('scripts')
+
 <script>
+    
     var uploadedAttachmentsMap = {}
 Dropzone.options.attachmentsDropzone = {
     url: '{{ route('admin.tickets.storeMedia') }}',
@@ -259,4 +329,27 @@ Dropzone.options.attachmentsDropzone = {
      }
 }
 </script>
+
+@section('scripts')
+
+ <script>
+ 
+      $('#content').summernote({
+        placeholder: '',
+        tabsize: 2,
+        height: 120,
+        toolbar: [
+          ['style', ['style']],
+          ['font', ['bold', 'underline', 'clear']],
+          ['color', ['color']],
+          ['para', ['ul', 'ol', 'paragraph']],
+          ['table', ['table']],
+          ['insert', ['link', 'picture', 'video']],
+          ['view', ['fullscreen', 'codeview', 'help']]
+        ]
+      });
+    </script>
+      <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-tagsinput/0.8.0/bootstrap-tagsinput.js"></script>
+@endsection
 @stop

@@ -5,7 +5,7 @@
         'type' => 'project',
         'install_path' => __DIR__ . '/../../',
         'aliases' => array(),
-        'reference' => 'c9dbae7169ebe40b8d94b8af6b49933172b479e8',
+        'reference' => 'b1820436ffe280eb82997cb3f2742c35840e4484',
         'name' => 'laravel/laravel',
         'dev' => true,
     ),
@@ -456,7 +456,7 @@
             'type' => 'project',
             'install_path' => __DIR__ . '/../../',
             'aliases' => array(),
-            'reference' => 'c9dbae7169ebe40b8d94b8af6b49933172b479e8',
+            'reference' => 'b1820436ffe280eb82997cb3f2742c35840e4484',
             'dev_requirement' => false,
         ),
         'laravel/passport' => array(
@@ -1002,6 +1002,15 @@
             'replaced' => array(
                 0 => '4.2.3',
             ),
+        ),
+        'rtconner/laravel-tagging' => array(
+            'pretty_version' => '4.1.4',
+            'version' => '4.1.4.0',
+            'type' => 'library',
+            'install_path' => __DIR__ . '/../rtconner/laravel-tagging',
+            'aliases' => array(),
+            'reference' => 'bcce5300c01e5706b01f3dd3d7c920b46eb63c06',
+            'dev_requirement' => false,
         ),
         'sebastian/cli-parser' => array(
             'pretty_version' => '1.0.1',

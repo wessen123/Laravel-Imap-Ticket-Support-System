@@ -22,6 +22,9 @@ class StoreCategoryRequest extends FormRequest
             'name' => [
                 'required',
             ],
+            'c_id' => [
+                'required',
+            ]
         ];
     }
 }

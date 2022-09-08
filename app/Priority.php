@@ -29,4 +29,5 @@ class Priority extends Model
     {
         return $this->hasMany(Ticket::class, 'priority_id', 'id');
     }
+  
 }

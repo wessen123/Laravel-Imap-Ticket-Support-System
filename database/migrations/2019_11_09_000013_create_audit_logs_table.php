@@ -14,7 +14,7 @@ class CreateAuditLogsTable extends Migration
             $table->unsignedInteger('subject_id')->nullable();
             $table->string('subject_type')->nullable();
             $table->unsignedInteger('user_id')->nullable();
-            $table->text('properties')->nullable();
+            $table->longtext('properties')->nullable();
             $table->string('host', 45)->nullable();
             $table->timestamps();
         });

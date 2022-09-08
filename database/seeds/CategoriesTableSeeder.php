@@ -21,7 +21,9 @@ class CategoriesTableSeeder extends Seeder
         {
             Category::create([
                 'name'  => $category,
+                'c_id'  => 0,
                 'color' => $faker->hexcolor
+                
             ]);
         }
     }

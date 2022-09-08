@@ -1,6 +1,24 @@
 @extends('layouts.admin')
 @section('content')
+@php
+                                                                                                                       
+$content=$comment->comment_text;
 
+      // $activity = explode( '<div dir="ltr">' , $content );
+      //$activity_second = explode("</div>" , $activity );
+      //$x= $activity_second[0];
+      $y= preg_match_all('#<div.(.+?)</div>#', $content, $matches);
+  if($y){
+      foreach($matches[0] as $match) {
+          
+      $x= $match; 
+      break;
+  } 
+  }else {
+  $x= $content ;
+  
+  }
+                                @endphp 
 <div class="card">
     <div class="card-header">
         {{ trans('global.show') }} {{ trans('cruds.comment.title') }}
@@ -47,7 +65,7 @@
                             {{ trans('cruds.comment.fields.user') }}
                         </th>
                         <td>
-                            {{ $comment->user->name ?? '' }}
+                            {{ $comment->user->name ?? $comment->author_name  }}
                         </td>
                     </tr>
                     <tr>
@@ -55,7 +73,7 @@
                             {{ trans('cruds.comment.fields.comment_text') }}
                         </th>
                         <td>
-                            {!! $comment->comment_text !!}
+                            {!! $x !!}
                         </td>
                     </tr>
                 </tbody>

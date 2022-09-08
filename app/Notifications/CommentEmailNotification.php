@@ -7,6 +7,7 @@ use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Notifications\Messages\MailMessage;
 use Illuminate\Notifications\Notification;
 use Illuminate\Support\Str;
+use Illuminate\Support\HtmlString;
 
 class CommentEmailNotification extends Notification
 {
@@ -20,6 +21,7 @@ class CommentEmailNotification extends Notification
     public function __construct($comment)
     {
         $this->comment = $comment;
+       // dd( $this->comment); 
     }
 
     /**
@@ -30,7 +32,7 @@ class CommentEmailNotification extends Notification
      */
     public function via($notifiable)
     {
-        return ['mail'];
+        return ['mail','database'];
     }
 
     /**
@@ -41,15 +43,48 @@ class CommentEmailNotification extends Notification
      */
     public function toMail($notifiable)
     {
+        $cc=   $this->comment->cc;    
+       // dd(storage_path('tmp/uploads/62fa554dc3fbd_images.png' ));  
+      // $file=$this->comment->ticket->getMedia(); 
+        if($cc!=null){         
         return (new MailMessage)
-                    ->subject('New comment on ticket '.$this->comment->ticket->title)
-                    ->greeting('Hi,')
-                    ->line('New comment on ticket '.$this->comment->ticket->title.':')
-                    ->line('')
-                    ->line(Str::limit($this->comment->comment_text, 500))
-                    ->action('View full ticket', route(optional($notifiable)->id ? 'admin.tickets.show' : 'tickets.show', $this->comment->ticket->id))
-                    ->line('Thank you')
-                    ->line('Agence Solumed Ticket Support system' . ' Jonathan Boisvert')
+                    ->cc($cc)
+                    ->subject('Re: '.$this->comment->ticket->title)
+                   
+                    ->greeting('Your Ticket Status  Is:  '.$this->comment->ticket->status->name)
+                   
+                    ->line(new HtmlString($this->comment->comment_text))
+                    
                     ->salutation(' ');
+    }else{
+
+        return (new MailMessage)
+        
+        ->subject('Re: '.$this->comment->ticket->title)
+        ->greeting('Your Ticket Status  Is:  '.$this->comment->ticket->status->name)
+       
+        ->line(new HtmlString($this->comment->comment_text))
+        
+        ->salutation(' ');
+    }
+}
+
+
+     /**
+     * Get the array representation of the notification.
+     *
+     * @param  mixed  $notifiable
+     * @return array
+     */
+    public function toDatabase($notifiable)
+    {
+        return [
+            //
+            
+            'ticket_id'=>$this->comment->ticket->id,
+            'title'=>"new messages for ". $this->comment->ticket->title,
+            'name'=>$this->comment['author_email'],
+            
+        ];
     }
 }

@@ -29,4 +29,5 @@ class Status extends Model
     {
         return $this->hasMany(Ticket::class, 'status_id', 'id');
     }
+  
 }

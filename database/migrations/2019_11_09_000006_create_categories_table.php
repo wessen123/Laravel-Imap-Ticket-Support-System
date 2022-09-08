@@ -12,9 +12,9 @@ class CreateCategoriesTable extends Migration
             $table->increments('id');
 
             $table->string('name');
-
+           
             $table->string('color')->nullable();
-
+            $table->integer('c_id')->unsigned()->default(0);
             $table->timestamps();
 
             $table->softDeletes();

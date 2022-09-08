@@ -32,6 +32,20 @@
                         </th>
                         <td style="background-color:{{ $category->color ?? '#FFFFFF' }}"></td>
                     </tr>
+                    <tr>
+                        <th>
+                            {{ trans('Sub Category') }}
+                        </th>
+                        <td>
+                            @if($category->childs->count()>0)
+                            @foreach($category->childs as $subMenu)
+                          <label class="badge bg-primary">  {{ $subMenu->name ?? '' }}</label>
+                            @endforeach
+                            @else
+                                 <p>No</p>
+                            @endif
+                        </td>
+                    </tr>
                 </tbody>
             </table>
             <a style="margin-top:20px;" class="btn btn-default" href="{{ url()->previous() }}">

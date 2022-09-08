@@ -64,17 +64,17 @@ return [
             "timeout" => 30
         ],
 
-        /*
+        
         'gmail' => [ // account identifier
             'host' => 'imap.gmail.com',
             'port' => 993,
             'encryption' => 'ssl',
             'validate_cert' => true,
-            'username' => 'example@gmail.com',
-            'password' => 'PASSWORD',
-            'authentication' => 'oauth',
+            'username' => 'wondwessenh41@gmail.com',
+            'password' => 'tedehhitvgczoeve',
+            'authentication' =>  null,
         ],
-
+/*
         'another' => [ // account identifier
             'host' => '',
             'port' => 993,

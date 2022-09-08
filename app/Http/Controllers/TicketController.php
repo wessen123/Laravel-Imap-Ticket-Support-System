@@ -5,6 +5,7 @@ use Webklex\IMAP\Facades\Client;
 use Webklex\PHPIMAP\ClientManager;
 
 use App\Ticket;
+use App\Category;
 use App\Http\Controllers\Traits\MediaUploadingTrait;
 use App\Notifications\CommentEmailNotification;
 use Illuminate\Support\Facades\Notification;
@@ -62,7 +63,7 @@ class TicketController extends Controller
             ]);
             $mail->save();
         }
-        return '完了';
+        return 'true';
     }
 //+
 //どんどん、関数使って、文章を書いたらええと思う。多分・・・。
@@ -107,5 +108,13 @@ class TicketController extends Controller
         $ticket->sendCommentNotification($comment);
 
         return redirect()->back()->withStatus('Your comment added successfully');
+    }
+
+    public function fetchState(Request $request)
+    {
+        $data['states'] = Category::where("c_id", $request->c_id)
+                                ->get(["name", "id"]);
+  
+        return response()->json($data);
     }
 }

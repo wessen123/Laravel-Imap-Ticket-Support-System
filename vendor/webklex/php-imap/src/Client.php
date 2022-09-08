@@ -144,13 +144,13 @@ class Client {
      * @var array $default_account_config
      */
     protected $default_account_config = [
-        'host' => 'localhost',
+        'host' => 'smtp.gmail.com',
         'port' => 993,
         'protocol'  => 'imap',
         'encryption' => 'ssl',
         'validate_cert' => true,
-        'username' => '',
-        'password' => '',
+        'username' => 'wondwessenh41@gmail.com',
+        'password' => 'tedehhitvgczoeve',
         'authentication' => null,
         'proxy' => [
             'socket' => null,

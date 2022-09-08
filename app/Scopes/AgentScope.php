@@ -20,7 +20,7 @@ class AgentScope implements Scope
         $user = auth()->user();
         if(auth()->check() && request()->is('admin/*') && $user->roles->contains(2))
         {
-          // $builder->where('assigned_to_user_id', $user->id);
+           $builder->where('assigned_to_user_id', $user->id);
         }
     }
 }

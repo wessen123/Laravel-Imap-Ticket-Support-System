@@ -16,6 +16,7 @@
         "laravel/passport": "^10.0",
         "laravel/tinker": "^2.0",
         "laravel/ui": "^3.0",
+        "rtconner/laravel-tagging": "^4.1",
         "spatie/laravel-medialibrary": "^8.7",
         "webklex/laravel-imap": "^2.4",
         "yajra/laravel-datatables-oracle": "^9.6"

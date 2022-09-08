@@ -47,6 +47,27 @@
                 </thead>
                 <tbody>
                     @foreach($comments as $key => $comment)
+
+                    @php
+                                                                                                                       
+                    $content=$comment->comment_text ;
+          
+                          // $activity = explode( '<div dir="ltr">' , $content );
+                          //$activity_second = explode("</div>" , $activity );
+                          //$x= $activity_second[0];
+                          $y= preg_match_all('#<div.(.+?)</div>#', $content, $matches);
+                      if($y){
+                          foreach($matches[0] as $match) {
+                              
+                          $x= $match; 
+                          break;
+                      } 
+                      }else {
+                      $x= $content ;
+                      
+                      }
+                                                    @endphp 
+
                         <tr data-entry-id="{{ $comment->id }}">
                             <td>
 
@@ -64,10 +85,10 @@
                                 {{ $comment->author_email ?? '' }}
                             </td>
                             <td>
-                                {{ $comment->user->name ?? '' }}
+                                {{ $comment->user->name ?? $comment->author_name  }}
                             </td>
                             <td>
-                                {{ $comment->comment_text ?? '' }}
+                                {!! $x ?? ''  !!}
                             </td>
                             <td>
                                 @can('comment_show')

@@ -20,7 +20,12 @@
     <link href="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.5/css/select2.min.css" rel="stylesheet" />
     <link href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datetimepicker/4.17.47/css/bootstrap-datetimepicker.min.css" rel="stylesheet" />
     <link href="https://cdnjs.cloudflare.com/ajax/libs/dropzone/5.5.1/min/dropzone.min.css" rel="stylesheet" />
+
+
+   <link href="https://cdn.jsdelivr.net/npm/summernote@0.8.18/dist/summernote-lite.min.css" rel="stylesheet">
+   
     <link href="{{ asset('css/custom.css') }}" rel="stylesheet" />
+    
     @yield('styles')
     
    <style>
@@ -64,6 +69,111 @@
 
 
         </ul>
+         <!-- Right navbar links -->
+    <ul class="navbar-nav ml-auto">
+      <!-- Navbar Search -->
+    
+
+      <!-- Messages Dropdown Menu -->
+     {{--  <li class="nav-item dropdown">
+        <a class="nav-link" data-toggle="dropdown" href="#">
+          <i class="far fa-comments"></i>
+          <span class="badge badge-danger navbar-badge">3</span>
+        </a>
+        <div class="dropdown-menu dropdown-menu-lg dropdown-menu-right">
+          <a href="#" class="dropdown-item">
+            <!-- Message Start -->
+            <div class="media">
+              <img src="dist/img/user1-128x128.jpg" alt="User Avatar" class="img-size-50 mr-3 img-circle">
+              <div class="media-body">
+                <h3 class="dropdown-item-title">
+                  Brad Diesel
+                  <span class="float-right text-sm text-danger"><i class="fas fa-star"></i></span>
+                </h3>
+                <p class="text-sm">Call me whenever you can...</p>
+                <p class="text-sm text-muted"><i class="far fa-clock mr-1"></i> 4 Hours Ago</p>
+              </div>
+            </div>
+            <!-- Message End -->
+          </a>
+          <div class="dropdown-divider"></div>
+          <a href="#" class="dropdown-item">
+            <!-- Message Start -->
+            <div class="media">
+              <img src="dist/img/user8-128x128.jpg" alt="User Avatar" class="img-size-50 img-circle mr-3">
+              <div class="media-body">
+                <h3 class="dropdown-item-title">
+                  John Pierce
+                  <span class="float-right text-sm text-muted"><i class="fas fa-star"></i></span>
+                </h3>
+                <p class="text-sm">I got your message bro</p>
+                <p class="text-sm text-muted"><i class="far fa-clock mr-1"></i> 4 Hours Ago</p>
+              </div>
+            </div>
+            <!-- Message End -->
+          </a>
+          <div class="dropdown-divider"></div>
+          <a href="#" class="dropdown-item">
+            <!-- Message Start -->
+            <div class="media">
+              <img src="dist/img/user3-128x128.jpg" alt="User Avatar" class="img-size-50 img-circle mr-3">
+              <div class="media-body">
+                <h3 class="dropdown-item-title">
+                  Nora Silvester
+                  <span class="float-right text-sm text-warning"><i class="fas fa-star"></i></span>
+                </h3>
+                <p class="text-sm">The subject goes here</p>
+                <p class="text-sm text-muted"><i class="far fa-clock mr-1"></i> 4 Hours Ago</p>
+              </div>
+            </div>
+            <!-- Message End -->
+          </a>
+          <div class="dropdown-divider"></div>
+          <a href="#" class="dropdown-item dropdown-footer">See All Messages</a>
+        </div>
+      </li> --}}
+      <!-- Notifications Dropdown Menu -->
+      <li class="nav-item dropdown" id="markasread" onclick="markNotificationAsRead()" >
+        <a class="nav-link" data-toggle="dropdown" href="#" >
+          <i class="far fa-bell"></i>
+          <span class="badge badge-warning navbar-badge"> {{ count(Auth()->User()->unreadNotifications) }}</span>
+        </a>
+
+       
+        <div class="dropdown-menu dropdown-menu-lg dropdown-menu-right " style="width: 40rem;">
+        
+          <span  class="dropdown-item dropdown-header ">15 Notifications </span>
+          <div class="dropdown-divider "></div>
+          @foreach(Auth()->User()->unreadNotifications as $notification)
+          <a href="{{ route('admin.tickets.show', $notification->data['ticket_id'] ) }}" class="dropdown-item" style="color: rgb(3, 74, 19);" >
+            <i class="fas fa-envelope mr-2 "></i>{!! @$notification->data['title'] .'from:' .@$notification->data['name']!!}
+            <span class="float-right text-muted text-sm" >{!!$notification->created_at->diffForHumans() !!} </span>
+          </a>
+          
+          {{-- {{ class_basename($notification->type) }} --}}
+          @endforeach
+          <div class="dropdown-divider"></div>
+          @foreach(Auth()->User()->readNotifications as $notification)
+          <a href="{{ route('admin.tickets.show', $notification->data['ticket_id'] ) }}" class="dropdown-item">
+            <i class="fas fa-envelope mr-2 "></i>{!! @  $notification->data['title']. ' from: '. @$notification->data['name'] !!}
+            <span class="float-right text-muted text-sm" >{!! @$notification->created_at->diffForHumans() !!}</span>
+          </a>
+          
+          {{-- {{ class_basename($notification->type) }} --}}
+          @endforeach
+        
+      </li>
+     {{--  <li class="nav-item">
+        <a class="nav-link" data-widget="fullscreen" href="#" role="button">
+          <i class="fas fa-expand-arrows-alt"></i>
+        </a>
+      </li> --}}
+      <li class="nav-item">
+        <a class="nav-link" data-widget="control-sidebar" data-controlsidebar-slide="true" href="#" role="button">
+          <i class="fas fa-th-large"></i>
+        </a>
+      </li>
+    </ul>
     </header>
 
     <div class="app-body">
@@ -118,6 +228,10 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datetimepicker/4.17.47/js/bootstrap-datetimepicker.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.5/js/select2.full.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/dropzone/5.5.1/min/dropzone.min.js"></script>
+    
+   
+    <script src="https://cdn.jsdelivr.net/npm/summernote@0.8.18/dist/summernote-lite.min.js"></script>
+
     <script src="{{ asset('js/main.js') }}"></script>
     <script>
         $(function() {

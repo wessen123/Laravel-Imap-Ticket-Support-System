@@ -19,6 +19,7 @@ class Category extends Model
 
     protected $fillable = [
         'name',
+        'c_id',
         'color',
         'created_at',
         'updated_at',
@@ -29,4 +30,9 @@ class Category extends Model
     {
         return $this->hasMany(Ticket::class, 'category_id', 'id');
     }
+
+    public function childs(){
+        return $this->hasMany('App\Category','c_id');
+      }
+     
 }

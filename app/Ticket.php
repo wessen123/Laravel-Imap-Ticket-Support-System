@@ -1,7 +1,7 @@
 <?php
 
 namespace App;
-
+use \Conner\Tagging\Taggable;
 use App\Scopes\AgentScope;
 use App\Traits\Auditable;
 use App\Notifications\CommentEmailNotification;
@@ -15,7 +15,7 @@ use Spatie\MediaLibrary\MediaCollections\Models\Media;
 class Ticket extends Model implements HasMedia
 {
     use SoftDeletes, InteractsWithMedia, Auditable;
-
+    use Taggable;
     public $table = 'tickets';
 
     protected $appends = [
@@ -30,6 +30,9 @@ class Ticket extends Model implements HasMedia
 
     protected $fillable = [
         'uid',
+        'message_id',
+        'referance',
+        'reply',
         'title',
         'content',
         'status_id',
@@ -41,6 +44,7 @@ class Ticket extends Model implements HasMedia
         'author_name',
         'author_email',
         'assigned_to_user_id',
+        'received_date',
     ];
 
     public static function boot()
@@ -49,17 +53,28 @@ class Ticket extends Model implements HasMedia
 
         Ticket::observe(new \App\Observers\TicketActionObserver);
 
-        static::addGlobalScope(new AgentScope);
+      // static::addGlobalScope(new AgentScope);
     }
 
     public function registerMediaConversions(Media $media = null): void
     {
         $this->addMediaConversion('thumb')->width(50)->height(50);
     }
-
+    public function scopeAgentTickets($query)
+    {
+        $user = auth()->user();
+        if(auth()->check() && request()->is('admin/*') && $user->roles->contains(2))
+        {
+         $query->where('assigned_to_user_id', $user->id);
+        }
+    }
     public function comments()
     {
         return $this->hasMany(Comment::class, 'ticket_id', 'id');
+    }
+    public function notes()
+    {
+        return $this->hasMany(Note::class, 'ticket_id', 'id');
     }
 
     public function getAttachmentsAttribute()
@@ -86,7 +101,10 @@ class Ticket extends Model implements HasMedia
     {
         return $this->belongsTo(User::class, 'assigned_to_user_id');
     }
-
+    public function tags()
+    {
+        return $this->belongsTo(Tag::class, 'id');
+    }
     public function scopeFilterTickets($query)
     {
         $query->when(request()->input('priority'), function($query) {

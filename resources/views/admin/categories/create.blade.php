@@ -33,6 +33,37 @@
                     {{ trans('cruds.category.fields.color_helper') }}
                 </p>
             </div>
+           
+            <div class="form-group {{ $errors->has('status_id') ? 'has-error' : '' }}">
+                    <label style=" color: #8d3e3e;   font-size:1.5em;margin:0; font-family:Times New Roman, Times, serif;"  for="status">{{ trans('Main Catagory') }}</label>
+                    <select name="c_id" id="status" class="form-control select1" required>
+                        <option style="color: #8d3e3e;   font-size:1.5em;margin:0; font-family: Times New Roman, Times, serif;" value="">Select Category </option>
+                        <option style="color: #8d3e3e;   font-size:1.5em;margin:0; font-family: Times New Roman, Times, serif;" value="0">Root Category </option>
+                        @foreach($cats as $id => $cat)
+                            <option style="color: #8d3e3e;   font-size:1.5em;margin:0; font-family: Times New Roman, Times, serif;" value="{{ $cat->id }}">{{ $cat->name }}</option>
+                            @if($cat->childs->count()>0)
+                            @foreach($cat->childs as $id => $ca)
+                            <option  style="color: rgb(16, 150, 40);font-size:1.3em;margin:0; font-family: Times New Roman, Times, serif;"  value="{{ $ca->id }}">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;-{{ $ca->name }}</option>
+                            @foreach($ca->childs as $id => $c)
+                            <option  style="color: rgb(230, 238, 15);font-size:1.3em;margin-left:10px; font-family: Times New Roman, Times, serif;"  value="{{ $c->id }}">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{{ $c->name }}</option>
+                            @foreach($c->childs as $id => $caa)
+                            <option  style="color: rgb(250, 52, 52);font-size:1.3em;margin:0; font-family: Times New Roman, Times, serif;"  value="{{ $caa->id }}">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{{ $caa->name }}</option>
+                          
+                            @endforeach
+                            @endforeach
+                            @endforeach
+                        @else
+                        <option style=" color: #eb0d0d;" value="" >&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<b>no sub cat for {{ $cat->name }}</b> </option>
+                        @endif
+                            @endforeach
+                    </select>
+                    @if($errors->has('status_id'))
+                        <em class="invalid-feedback">
+                            {{ $errors->first('status_id') }}
+                        </em>
+                    @endif
+                </div>
+           
             <div>
                 <input class="btn btn-danger" type="submit" value="{{ trans('global.save') }}">
             </div>
