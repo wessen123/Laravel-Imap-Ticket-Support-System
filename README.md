@@ -30,5 +30,5 @@ This is a robust and automated Ticket Support System built using PHP Laravel, in
 ### Steps
 1. **Clone the Repository**
    ```bash
-   git clone https://github.com/your-username/ticket-support-system.git
+   git clone https://github.com/wessen123/ticket-support-system.git
    cd ticket-support-system
